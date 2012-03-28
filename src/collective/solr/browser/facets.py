@@ -1,3 +1,4 @@
+# -*- coding: utf8 -*-
 from copy import deepcopy
 from operator import itemgetter
 from string import strip
@@ -6,6 +7,7 @@ from urllib import urlencode
 from plone.app.layout.viewlets.common import SearchBoxViewlet
 from Products.Five import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+from Products.CMFPlone.utils import safe_unicode
 from zope.component import getUtility, queryUtility
 from zope.i18n import translate
 from zope.i18nmessageid import Message
@@ -146,7 +148,7 @@ class SearchFacetsView(BrowserView, FacetMixin):
                     # Use the default fallback
                     vfactory = getUtility(IFacetTitleVocabularyFactory)
                 vocabulary = vfactory(self.context)
-                value = value[1:-1]
+                value = safe_unicode(value[1:-1])
                 if value in vocabulary:
                     value = vocabulary.getTerm(value).title
                 if isinstance(value, Message):
