@@ -152,3 +152,28 @@ selection for "review_state":
   >>> browser.contents
   '...Search results...1 items matching...
    ...My folder...'
+
+
+Change control panel settings
+
+  >>> browser.open('http://nohost/plone/@@solr-controlpanel')
+  >>> browser.getControl(name='form.facets.0.').value = 'Subject'
+  >>> browser.getControl(name="form.actions.save").click()
+  >>> 'Changes saved.' in browser.contents
+  True
+  >>> browser.open('http://nohost/plone/@@solr-controlpanel')
+
+  >>> self.folder.setSubject(u'F\xf8\xf8'.encode('utf-8'))
+  >>> self.folder.reindexObject()
+  >>> form = browser.getForm(name='searchform', index=0)
+  >>> form.getControl('Search Site').value = 'my'
+  >>> form.submit()
+
+  >>> browser.contents
+  '...Limit search results...
+   ...F\xc3\xb8\xc3\xb8...'
+
+  >>> browser.getLink('F\xc3\xb8\xc3\xb8').click()
+  >>> browser.contents
+  '...Search results...1 items matching...
+   ...My folder...'
