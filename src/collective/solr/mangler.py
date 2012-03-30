@@ -133,9 +133,11 @@ def mangleQuery(keywords, config, schema):
             del args['operator']
         elif key == 'allowedRolesAndUsers':
             if getattr(config, 'exclude_user', False):
-                token = 'user$' + getSecurityManager().getUser().getId()
-                if token in value:
-                    value.remove(token)
+                user = getSecurityManager().getUser()
+                if user is not None and user.getUserName() != 'Anonymous User':
+                    token = 'user$' + user.getId()
+                    if token in value:
+                        value.remove(token)
         elif isinstance(value, DateTime):
             keywords[key] = iso8601date(value)
         elif not isinstance(value, basestring):

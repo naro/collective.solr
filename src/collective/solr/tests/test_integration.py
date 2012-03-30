@@ -63,6 +63,13 @@ class QueryManglerTests(SolrTestCase):
         self.assertEqual(keywords, {
             'allowedRolesAndUsers': ['Member'],
         })
+        # let's try the same as anonymous user
+        self.logout()
+        keywords = dict(allowedRolesAndUsers=['Member', 'user$test_user_1_'])
+        mangleQuery(keywords, config, schema)
+        self.assertEqual(keywords, {
+            'allowedRolesAndUsers': ['Member', 'user$test_user_1_'],
+        })
 
 
 class IndexingTests(SolrTestCase):
