@@ -4,6 +4,9 @@ Changelog
 3.1 - unreleased
 ----------------
 
+- Fix for non-ascii characters in a facet field contents (eg. Subject field)
+  [naro]
+
 3.0 - 2012-02-06
 ----------------
 
