@@ -8,6 +8,9 @@ from collective.solr.solr import SolrConnection
 from collective.solr.local import getLocal, setLocal
 from httplib import CannotSendRequest, ResponseNotReady
 from socket import error
+from collective.solr import SOLR_PRODUCTCONFIG_HOST
+from collective.solr import SOLR_PRODUCTCONFIG_PORT
+from collective.solr import SOLR_PRODUCTCONFIG_BASE
 
 logger = getLogger('collective.solr.manager')
 marker = object()
@@ -90,10 +93,13 @@ class SolrConnectionManager(object):
         if not config.active:
             return None
         conn = getLocal('connection')
-        if conn is None and config.host is not None:
-            host = '%s:%d' % (config.host, config.port)
+        host_ = SOLR_PRODUCTCONFIG_HOST or config.host
+        port_ = SOLR_PRODUCTCONFIG_PORT or config.port
+        base_ = SOLR_PRODUCTCONFIG_BASE or config.base
+        if conn is None and host_ is not None:
+            host = '%s:%d' % (host_, port_)
             logger.debug('opening connection to %s', host)
-            conn = SolrConnection(host=host, solrBase=config.base,
+            conn = SolrConnection(host=host, solrBase=base_,
                 persistent=True)
             setLocal('connection', conn)
         return conn

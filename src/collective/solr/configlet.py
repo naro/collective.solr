@@ -8,6 +8,9 @@ from plone.app.controlpanel.form import ControlPanelForm
 from collective.solr.interfaces import ISolrSchema, _
 from collective.solr.interfaces import ISolrConnectionConfig
 from collective.solr.interfaces import ISolrConnectionManager
+from collective.solr import SOLR_PRODUCTCONFIG_HOST
+from collective.solr import SOLR_PRODUCTCONFIG_PORT
+from collective.solr import SOLR_PRODUCTCONFIG_BASE
 
 
 class SolrControlPanelAdapter(SchemaAdapterBase):
@@ -217,3 +220,21 @@ class SolrControlPanel(ControlPanelForm):
     label = _('Solr settings')
     description = _('Settings to enable and configure Solr integration.')
     form_name = _('Solr settings')
+
+    def setUpWidgets(self, ignore_request=False):
+        if SOLR_PRODUCTCONFIG_HOST is not None:
+            self.form_fields['host'].for_display = True
+            self.form_fields['host'].field.required = False
+        if SOLR_PRODUCTCONFIG_PORT is not None:
+            self.form_fields['port'].for_display = True
+            self.form_fields['port'].field.required = False
+        if SOLR_PRODUCTCONFIG_BASE is not None:
+            self.form_fields['base'].for_display = True
+            self.form_fields['base'].field.required = False
+        super(SolrControlPanel, self).setUpWidgets(ignore_request)
+        if SOLR_PRODUCTCONFIG_HOST is not None:
+            self.widgets['host'].setRenderedValue(SOLR_PRODUCTCONFIG_HOST)
+        if SOLR_PRODUCTCONFIG_PORT is not None:
+            self.widgets['port'].setRenderedValue(SOLR_PRODUCTCONFIG_PORT)
+        if SOLR_PRODUCTCONFIG_BASE is not None:
+            self.widgets['base'].setRenderedValue(SOLR_PRODUCTCONFIG_BASE)
